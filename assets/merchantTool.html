@@ -1,0 +1,171 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<title>Home</title>
+<!-- for-mobile-apps -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords"
+	content="Medical Clinic Responsive web template, Bootstrap Web Templates, Flat Web Templates, Andriod Compatible web template, 
+Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyErricsson, Motorola web design" />
+<script type="application/x-javascript">
+	 addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false);
+		function hideURLbar(){ window.scrollTo(0,1); } 
+</script>
+<!-- //for-mobile-apps -->
+<link href="css/bootstrap.css" rel="stylesheet" type="text/css"
+	media="all" />
+<link href="css/style.css" rel="stylesheet" type="text/css" media="all" />
+<!-- js -->
+<script src="js/jquery-1.11.1.min.js"></script>
+<!-- js -->
+<script src="js/json2.js"></script>
+<link
+	href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800'
+	rel='stylesheet' type='text/css'>
+<link
+	href='https://fonts.googleapis.com/css?family=Archivo+Narrow:400,400italic,700,700italic'
+	rel='stylesheet' type='text/css'>
+<script type="text/javascript"
+	src="http://api.map.baidu.com/api?v=2.0&ak=134db1b9cf1f1f2b4427210932b34dcb"></script>
+</head>
+<body>
+	<!-- banner -->
+	<div class="container-full">
+		<div class="banner">
+<!-- 			<div class="banner-info-grid-right"> -->
+<!-- 			</div> -->
+			<div class="banner-info">
+				<form>
+					<input type="text" id="txtcity" value="北京"
+						onFocus="this.value = '';"
+						onBlur="if (this.value == '') {this.value = 'Enter Your Mail...';}">
+				<input type="button" value="返回首页"
+					onclick="window.location.href='main.html'">
+					<input type="text" id="txtsearch" value="肯德基"
+						onFocus="this.value = '';"
+						onBlur="if (this.value == '') {this.value = 'Enter Your Mail...';}">
+					<input id="search" type="button" value="搜索" >
+				</form>
+			</div>
+			<div class="clearfix"></div>
+			<!-- 			<a href="http://api.map.baidu.com/marker?location=39.916979519873,116.41004950566&title=我的位置&content=百度奎科大厦&src=百度地图">1233333333333333</a> -->
+		</div>
+		<div class="about-grid">
+			<div class="col-md-12 abt-grid">
+				<ul id="txtresult">
+					<li><a href="#">无搜索结果</a></li>
+				</ul>
+			</div>
+			<div class="clearfix"></div>
+		</div>
+		<div id="divmap" class="col-md-12"></div>
+		<script type="text/javascript">
+			var map = new BMap.Map("divmap"); //创建地图
+			var city = new BMap.LocalSearch(map, {
+				renderOptions: {
+					map: map,
+					autoViewport: true
+				}
+			});
+			map.addEventListener("click", function(e) { //点击事件    
+				if (!e.overlay) {
+					var myIcon = new BMap.Icon("http://api.map.baidu.com/img/markers.png", new BMap.Size(23, 25), {
+						offset: new BMap.Size(10, 25),
+						// 指定定位位置  
+						imageOffset: new BMap.Size(0, 0 - 10 * 25) // 设置图片偏移  
+					});
+					var marker = new BMap.Marker(e.point, {
+						icon: myIcon
+					});
+					map.removeOverlay(preMarker);
+					map.addOverlay(marker);
+					preMarker = marker;
+				}
+			});
+	
+			function addMarker(point, index) { // 创建图标对象   
+				var myIcon = new BMap.Icon("http://api.map.baidu.com/img/markers.png", new BMap.Size(23, 25), {
+					// 指定定位位置。   
+					// 当标注显示在地图上时，其所指向的地理位置距离图标左上    
+					// 角各偏移10像素和25像素。您可以看到在本例中该位置即是   
+					// 图标中央下端的尖角位置。    
+					offset: new BMap.Size(10, 25),
+					// 设置图片偏移。   
+					// 当您需要从一幅较大的图片中截取某部分作为标注图标时，您   
+					// 需要指定大图的偏移位置，此做法与css sprites技术类似。    
+					imageOffset: new BMap.Size(0, 0 - index * 25) // 设置图片偏移    
+				});
+				// 创建标注对象并添加到地图   
+				var marker = new BMap.Marker(point, {
+					icon: myIcon
+				});
+				map.addOverlay(marker);
+			}
+	
+			function addInfo(title, lng, lat) {
+				var itemLi = $("<li></li>");
+				var itemA = $("<a></a>");
+				var itemInput = $("<input type='button'>");
+				itemInput.attr("value", "添加");
+				itemInput.on("click", function(){
+					var jsonDate = {MyData : []};
+	 				var jsonValue = window.data.read();
+	 				if (jsonValue != null && jsonValue != undefined && jsonValue != ''){
+	 					jsonDate = eval("(" + window.data.read() + ")");
+	 				}
+					var itemInfo = $(this).next();
+					var item = {id:"1", name:itemInfo.text(), pos:itemInfo.attr("llp")};
+					jsonDate.MyData.push(item);
+// 					alert(JSON.stringify(jsonDate));
+					window.data.write(JSON.stringify(jsonDate));
+				});
+				itemLi.append(itemInput);
+				
+				itemA.attr("llp", lng + "," + lat);
+				itemA.attr("href", "javascript:void(0);");
+				itemA.text(title);
+				itemA.on("click", function(){
+					var llp = $(this).attr("llp");
+					var strs = llp.split(","); //字符分割 
+					map.clearOverlays(); //清除地图上所有标记
+					var point = new BMap.Point(strs[0], strs[1]);
+					addMarker(point, 0);
+					map.centerAndZoom(point, 15);
+				});
+				itemLi.append(itemA);
+
+				$("#txtresult").append(itemLi);
+			}
+
+			$(document).ready(function(){
+				$("#search").on("click", function(){
+					$("#txtresult li").remove();
+					$("#divmap").css("height", $(document.body).width() + "px");//通过设置CSS属性来设置元素的高
+					map.clearOverlays(); //清除地图上所有标记
+					var cityName = $("#txtcity").val();
+					city.search(cityName); //查找城市
+					var merchantName = $("#txtsearch").val();
+					var localSearch = new BMap.LocalSearch(cityName);
+					var i = 1;
+					localSearch.setSearchCompleteCallback(function(result) {
+						if (localSearch.getStatus() == BMAP_STATUS_SUCCESS) {
+							map.addControl(new BMap.NavigationControl());
+							map.addControl(new BMap.ScaleControl());
+							map.addControl(new BMap.OverviewMapControl());
+		
+							var poi = result.getPoi(0);
+							addInfo(poi.title, poi.point.lng, poi.point.lat)
+							if (result.getPageIndex() != result.getNumPages()) {
+								localSearch.gotoPage(i);
+								i = i + 1;
+							}
+						}
+					});
+					localSearch.search(merchantName);
+				});
+			});
+		</script>
+	</div>
+</body>
+</html>

@@ -1,0 +1,254 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<title>Home</title>
+<!-- for-mobile-apps -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords"
+	content="Medical Clinic Responsive web template, Bootstrap Web Templates, Flat Web Templates, Andriod Compatible web template, 
+Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyErricsson, Motorola web design" />
+<script type="application/x-javascript">
+	 addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false);
+		function hideURLbar(){ window.scrollTo(0,1); } 
+</script>
+<!-- //for-mobile-apps -->
+<link href="css/bootstrap.css" rel="stylesheet" type="text/css"
+	media="all" />
+<link href="css/style.css" rel="stylesheet" type="text/css" media="all" />
+<!-- js -->
+<script src="js/jquery-1.11.1.min.js"></script>
+<link
+	href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800'
+	rel='stylesheet' type='text/css'>
+<link
+	href='https://fonts.googleapis.com/css?family=Archivo+Narrow:400,400italic,700,700italic'
+	rel='stylesheet' type='text/css'>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=134db1b9cf1f1f2b4427210932b34dcb"></script> 
+</head>
+<body>
+	<!-- banner -->
+	<div class="container-full">
+		<div class="banner">
+			<div class="banner-info-grid-right">
+				<input type="button" value="返回首页" onclick="window.location.href='main.html'">
+			</div>
+			<div class="banner-info">
+				<form>
+					<input type="text" id="txtcity" value="北京" onFocus="this.value = '';" onBlur="if (this.value == '') {this.value = 'Enter Your Mail...';}" >
+					<input type="text" id="txtsearch" value="肯德基" onFocus="this.value = '';" onBlur="if (this.value == '') {this.value = 'Enter Your Mail...';}" > 
+					<input type="button" value="搜索" onclick="search()">
+				</form>
+			</div>
+			<div class="clearfix"></div>
+<!-- 			<a href="http://api.map.baidu.com/marker?location=39.916979519873,116.41004950566&title=我的位置&content=百度奎科大厦&src=百度地图">1233333333333333</a> -->
+		</div>
+		<div class="about-grid">
+			<div class="col-md-12 abt-grid">
+				<ul id="txtresult">
+					<li><a href="#">无搜索结果</a></li>
+				</ul>
+			</div>
+			<div class="clearfix"></div>
+		</div>
+		<div id="divmap" class="col-md-12">
+		</div>
+	<script type="text/javascript">
+	var map = new BMap.Map("divmap");//创建地图
+	var city=new BMap.LocalSearch(map,{renderOptions:{map:map,autoViewport:true}});
+	map.addEventListener("click", function(e){   //点击事件    
+	    if(!e.overlay){  
+	        var myIcon = new BMap.Icon("http://api.map.baidu.com/img/markers.png", new BMap.Size(23, 25), {  
+	            offset: new BMap.Size(10, 25), // 指定定位位置  
+	            imageOffset: new BMap.Size(0, 0 - 10 * 25) // 设置图片偏移  
+	        });  
+	        var marker=new BMap.Marker(e.point,{icon:myIcon});  
+	        map.removeOverlay(preMarker);  
+	        map.addOverlay(marker);  
+	        preMarker=marker;  
+	    }  
+	}); 
+	
+	function addMarker(point, index){  // 创建图标对象   
+		var myIcon = new BMap.Icon("http://api.map.baidu.com/img/markers.png", new BMap.Size(23, 25), {    
+			// 指定定位位置。   
+			// 当标注显示在地图上时，其所指向的地理位置距离图标左上    
+			// 角各偏移10像素和25像素。您可以看到在本例中该位置即是   
+		   // 图标中央下端的尖角位置。    
+		   offset: new BMap.Size(10, 25),    
+		   // 设置图片偏移。   
+		   // 当您需要从一幅较大的图片中截取某部分作为标注图标时，您   
+		   // 需要指定大图的偏移位置，此做法与css sprites技术类似。    
+		   imageOffset: new BMap.Size(0, 0 - index * 25)   // 设置图片偏移    
+		 });      
+			// 创建标注对象并添加到地图   
+		 var marker = new BMap.Marker(point, {icon: myIcon});    
+		 map.addOverlay(marker);    
+	}
+	function deletelis(){
+	  var s=document.getElementById('txtresult');
+	  var t=s.childNodes.length;
+	  for (var i=0;i<t;i++)
+	  {
+	    s.removeChild(s.childNodes[0]);
+	  }
+	 }
+	
+	function add(title, lng, lat){
+	  var s=document.getElementById('txtresult');
+      var li= document.createElement("li");    
+
+      var input_addr = document.createElement("input"); 
+      input_addr.type = "button";
+      input_addr.value = "添加";
+      input_addr.onclick = function(){
+    	  alert("已经添加到商家列表。");
+      }
+      li.appendChild(input_addr);  
+      var href_a = document.createElement("a"); 
+  　　　　href_a.setAttribute("llp", lng + "," + lat); 
+      href_a.href="javascript:void(0);";  
+      href_a.onclick= function(){
+    	  var llp = this.attributes["llp"].nodeValue;
+    	  var strs= llp.split(","); //字符分割 
+  		  map.clearOverlays(); //清除地图上所有标记
+    	  var point = new BMap.Point(strs[0], strs[1]);
+
+          if(navigator.geolocation){  
+              navigator.geolocation.getCurrentPosition(  
+                  function(p){  
+                      var latitude=p.coords.latitude;//获取坐标点纬度  
+                      var longitude=p.coords.longitude;//获取坐标点经度  
+                      //以指定的经度与纬度创建一个坐标点  
+                      var po=new BMap.Point(longitude,latitude);  
+                      //创建一个地理解析器  
+                      var geocoder=new BMap.Geocoder();  
+                      //获取位置  
+                      geocoder.getLocation(po,function(rs){  
+                          //获取地理组件  
+                          var addComp=rs.addressComponents;  
+                          //获取省份  
+                          var province=addComp.province;  
+                          //获取城市  
+                          var city=addComp.city;  
+                          //获取区县  
+                          var district=addComp.district;  
+                          //获取街道  
+                          var street=addComp.street;  
+                          //获取街道号  
+                          var streetNumber=addComp.streetNumber;  
+                          alert(province+city+district+street+streetNumber);
+        					var href_l = "http://api.map.baidu.com/direction?"+
+        						"origin=latlng:"+latitude+","+longitude+"|name:"+province+city+district+street+streetNumber+
+        						"&destination=latlng:38.883593,121.532015|name:肯德基"+
+        						"&mode=driving"+
+        						"&region=大连"+
+        						"&output=html"+
+        						"&src=百度地图";
+        					window.location.href=href_l;
+                      });  
+                  },function(e){  
+                      switch (e.code) {  
+                          case e.TIMEOUT:  
+                              alert("定位失败，请求获取用户位置超时");  
+                              break;  
+                          case e.PERMISSION_DENIED:  
+                              alert("您拒绝了使用位置服务功能，查询已取消");  
+                              break;  
+                          case e.POSITION_UNAVAILABLE:  
+                              alert("抱歉，暂时无法为您所在的星球提供位置服务");  
+                              break;  
+                          case e.UNKNOWN_ERROR:  
+                              alert("发生一个位置错误");  
+                              break;  
+                      }  
+                  },{  
+                      //指示浏览器获取高精度的位置，默认false  
+                      enableHighAcuracy: true,  
+                      //指定获取地理位置的超时时间，默认不限时，单位为毫秒  
+                      timeout:5000,  
+                      //最长有效期，在重复获取地理位置时，此参数指定多久再次获取位置  
+                      maximumAge:2000  
+                  }  
+              );  
+          }else{  
+              alert("不支持");  
+          }  
+// 			$.ajax({
+// 				url: "http://api.map.baidu.com/location/ip?ak=CBdfe1779849c00ee9973931548da307&coor=bd09ll",
+// 				dataType:'jsonp',
+// 				processData: false, 
+// 				type:'get',
+// 				success:function(data){
+// 					var href_l = "http://api.map.baidu.com/direction?"+
+// 						"origin=latlng:"+data.content.point.y+","+data.content.point.x+"|name:当前位置"+
+// 						"&destination=latlng:38.883593,121.532015|name:肯德基"+
+// 						"&mode=driving"+
+// 						"&region=大连"+
+// 						"&output=html"+
+// 						"&src=百度地图";
+// 					window.location.href=href_l;
+// 				},
+// 				error:function(XMLHttpRequest, textStatus, errorThrown) { 
+// 				}
+// 			});
+//     	  window.location.href="http://api.map.baidu.com/direction/v2?origin=40.056878,116.30815&destination=31.222965,121.505821&ak=CBdfe1779849c00ee9973931548da307";
+          var href_l = "http://api.map.baidu.com/direction?"+
+			  "origin=latlng:"+strs[1]+","+strs[0]+"|name:我家"+
+				  "&destination=latlng:40.056878,116.30815|name:大雁塔"+
+				  "&mode=driving"+
+				  "&region=北京"+
+				  "&output=html"+
+				  "&src=百度地图";
+//   		  window.location.href=href_l;
+//     	  addMarker(point, 0);
+//     	  map.centerAndZoom(point, 15);
+      };
+      href_a.innerHTML =title;  
+      li.appendChild(href_a);  
+	  s.appendChild(li);
+	 }
+	
+	function search(){
+		deletelis()//每次生成前清空文本域
+		var divmap = document.getElementById('divmap');
+		divmap.style.height = document.body.clientWidth + "px";
+		map.clearOverlays(); //清除地图上所有标记
+		var c=document.getElementById("txtcity").value;
+		city.search(c);//查找城市
+		var s=document.getElementById("txtsearch").value;
+		var ls = new BMap.LocalSearch(c);
+		var i=1;
+		ls.setSearchCompleteCallback(function(rs){
+			if (ls.getStatus() == BMAP_STATUS_SUCCESS){
+				map.addControl(new BMap.NavigationControl()); 
+				map.addControl(new BMap.ScaleControl()); 
+				map.addControl(new BMap.OverviewMapControl()); 
+				
+				var poi=rs.getPoi(0);
+				add(poi.title, poi.point.lng, poi.point.lat)
+// 				addMarker(poi.point, i++);
+				//var mk = new BMap.Marker(poi.point);
+				//map.addOverlay(mk);   
+				//console.log("base:[" + poi.title+":" +poi.point.lng+","+poi.point.lat + "]");    
+// 				for(j=0;j<rs.getCurrentNumPois();j++)
+// 				{
+// 					var poi=rs.getPoi(j);
+// 					var mk = new BMap.Marker(poi.point);
+// 					map.addOverlay(mk);       
+// 					$("txtresult").value+= poi.title+":" +poi.point.lng+","+poi.point.lat+'\n';
+// 					//console.log("after:[" + poi.title+":" +poi.point.lng+","+poi.point.lat + "]");
+// 				} 
+				if(rs.getPageIndex()!=rs.getNumPages())  
+				{  
+					ls.gotoPage(i);
+					i=i+1;
+				}
+			}
+		});
+		ls.search(s);
+	}
+	</script>
+	</div>
+</body>
+</html>

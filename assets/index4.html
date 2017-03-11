@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Home</title>
+<!-- for-mobile-apps -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords"
+	content="Medical Clinic Responsive web template, Bootstrap Web Templates, Flat Web Templates, Andriod Compatible web template, 
+Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyErricsson, Motorola web design" />
+<script type="application/x-javascript">
+	
+	
+	 addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false);
+		function hideURLbar(){ window.scrollTo(0,1); } 
+
+
+</script>
+<!-- //for-mobile-apps -->
+<link href="css/bootstrap.css" rel="stylesheet" type="text/css"
+	media="all" />
+<link href="css/style.css" rel="stylesheet" type="text/css" media="all" />
+<!-- js -->
+<link
+	href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800'
+	rel='stylesheet' type='text/css'>
+<link
+	href='https://fonts.googleapis.com/css?family=Archivo+Narrow:400,400italic,700,700italic'
+	rel='stylesheet' type='text/css'>
+<script type="text/javascript"
+	src="http://api.map.baidu.com/api?v=2.0&ak=134db1b9cf1f1f2b4427210932b34dcb"></script>
+</head>
+<body>
+	<!-- banner -->
+	<div class="container-full">
+		<div class="banner">
+			<div class="banner-info-grid-right">
+				<input type="button" value="返回首页"
+					onclick="window.location.href='main.html'">
+			</div>
+			<div class="banner-info">
+				<form>
+					<input type="text" id="txtcity" value="北京"
+						onFocus="this.value = '';"
+						onBlur="if (this.value == '') {this.value = 'Enter Your Mail...';}">
+					<input type="text" id="txtsearch" value="肯德基"
+						onFocus="this.value = '';"
+						onBlur="if (this.value == '') {this.value = 'Enter Your Mail...';}">
+					<input type="button" value="搜索" onclick="search()">
+				</form>
+			</div>
+			<div class="clearfix"></div>
+			<!-- 			<a href="http://api.map.baidu.com/marker?location=39.916979519873,116.41004950566&title=我的位置&content=百度奎科大厦&src=百度地图">1233333333333333</a> -->
+		</div>
+		<div class="about-grid">
+			<div class="col-md-12 abt-grid">
+				<ul id="txtresult">
+					<li><a href="#">无搜索结果</a></li>
+				</ul>
+			</div>
+			<div class="clearfix"></div>
+		</div>
+		<div id="divmap" class="col-md-12"></div>
+		<script type="text/javascript">
+			var jsonObj2 = {
+				teacher : [ {
+					name : "jordan",
+					sex : "m",
+					age : "40"
+				}, {
+					name : "bryant",
+					sex : "m",
+					age : "28"
+				}, {
+					name : "McGrady",
+					sex : "m",
+					age : "27"
+				} ]
+			};
+
+			var jsonObj2New = {};
+			//invoke the update
+			updateData("jordan");
+			var persons = jsonObj2.teacher;
+			for (var i = 0; i < persons.length; i++) {
+				var cur_person = persons[i];
+				alert(cur_person.sex);
+			}
+
+			//invoke the delete
+			deleteData("jordan");
+			var persons = jsonObj2.teacher;
+			for (var i = 0; i < persons.length; i++) {
+				var cur_person = persons[i];
+				alert(cur_person.sex);
+			}
+
+			//push 
+			var temp = {
+				name : "kenny",
+				sex : "m",
+				age : "25"
+			};
+			jsonObj2.teacher.push(temp);
+			var persons = jsonObj2.teacher;
+			for (var i = 0; i < persons.length; i++) {
+				var cur_person = persons[i];
+				alert(cur_person.name);
+			}
+
+			function updateData(name) {
+				var persons = jsonObj2.teacher;
+				//alert(name);
+				for (var i = 0; i < persons.length; i++) {
+					var cur_person = persons[i];
+					if (cur_person.name == name) {
+						persons[i].sex = "f";
+					}
+				}
+			}
+
+			function deleteData(name) {
+				var persons = jsonObj2.teacher;
+				//alert(name);
+				for (var i = 0; i < persons.length; i++) {
+					var cur_person = persons[i];
+					if (cur_person.name == name) {
+						jsonObj2.teacher.splice(i, 1);
+					}
+				}
+			}
+		</script>
+	</div>
+</body>
+</html>
